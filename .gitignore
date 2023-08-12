@@ -1,0 +1,5 @@
+.vscode/
+.vscode/
+urlapp/__pycache__/
+urlapp/migrations/
+urlChecker/__pycache__/
