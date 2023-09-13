@@ -12,12 +12,12 @@ from sklearn.metrics import accuracy_score
 
 
 # loading the trained model
-with open('/home/ashade_samson/Documents/Final_Year_Project/model/url_predict_model','rb') as trained_model:
+with open('url_predict_model','rb') as trained_model:
     loaded_model = pickle.load(trained_model)
 
 
 # loading the vectorizer
-with open('/home/ashade_samson/Documents/Final_Year_Project/model/vectorizer','rb') as saved_vectorizer:
+with open('vectorizer','rb') as saved_vectorizer:
     vectorizer = pickle.load(saved_vectorizer)
 
 
@@ -59,6 +59,7 @@ def check_url(request):
 
 
             prediction = loaded_model.predict(url_tfidf)
+            print(prediction)
             is_malicious = bool(prediction[0])
 
             result = {"is_malicious": is_malicious}

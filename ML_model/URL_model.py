@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 # Read data from CSV file
-data = pd.read_csv("/home/ashade_samson/Documents/Final_Year_Project/model/dataset/test.csv")
+data = pd.read_csv("dataset/test.csv")
 data.head()
 
 

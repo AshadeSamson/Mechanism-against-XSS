@@ -22,4 +22,4 @@ const checkUrl = async (url) => {
 
 
 // Call the function with a URL to check
-checkUrl('https://terapeuta-2023.web.app');
+checkUrl('webdav1.storegate.com/uwiq175/home/uwiq175');
