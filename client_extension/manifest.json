@@ -1,0 +1,28 @@
+{
+    "manifest_version": 3,
+    "name": "MitXSS",
+    "version": "1.0",
+    "description": "Prevent against malicious URLs and Cross-site scripting attacks",
+    "permissions": ["tabs","activeTab", "storage"],
+    "browser_action": {
+      "default_popup": "src/popup/popup.html",
+      "default_icon": "src/images/xss.png"
+    },
+    "background": {
+      "scripts": ["src/background/background.js"],
+      "persistent": false
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["src/content/content.js"],
+        "css": ["src/content/content.css"]
+      }
+    ],
+    "icons": {
+      "16": "images/xss.png",
+      "48": "images/xss.png",
+      "128": "images/xss.png"
+    }
+  }
+  
