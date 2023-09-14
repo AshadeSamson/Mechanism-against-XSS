@@ -3,7 +3,7 @@
     "name": "MitXSS",
     "version": "1.0",
     "description": "Prevent against malicious URLs and Cross-site scripting attacks",
-    "permissions": ["tabs","activeTab", "storage"],
+    "permissions": ["tabs", "activeTab", "webRequest", "webRequestBlocking", "storage"],
     "browser_action": {
       "default_popup": "src/popup/popup.html",
       "default_icon": "src/images/xss.png"
@@ -16,6 +16,7 @@
       {
         "matches": ["<all_urls>"],
         "js": ["src/content/content.js"],
+        "run_at": "document_start",
         "css": ["src/content/content.css"]
       }
     ],
