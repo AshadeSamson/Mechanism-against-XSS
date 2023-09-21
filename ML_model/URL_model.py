@@ -15,7 +15,7 @@ data.head()
 
 # 'url' column for URLs and 'label' column for labels
 X = data['url']
-y = data['label']
+y = data['type']
 
 
 # function to preprocess the URL

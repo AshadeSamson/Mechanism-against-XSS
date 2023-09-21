@@ -3,21 +3,24 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import pickle
 import re
-from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from django.shortcuts import render
+from urllib.parse import urlparse
+
+
 
 
 # loading the trained model
-with open('url_predict_model','rb') as trained_model:
+with open('url_predict_model.pkl','rb') as trained_model:
     loaded_model = pickle.load(trained_model)
 
 
 # loading the vectorizer
-with open('vectorizer','rb') as saved_vectorizer:
+with open('vectorizer.pkl','rb') as saved_vectorizer:
     vectorizer = pickle.load(saved_vectorizer)
 
 
@@ -26,44 +29,47 @@ with open('vectorizer','rb') as saved_vectorizer:
 # and passes it to the ML model 
 # and returns a response
 
+
+def preprocess_url(url):
+    parsed_url = urlparse(url)
+    preprocessed_url = parsed_url.scheme + '://' + parsed_url.netloc + parsed_url.path
+    return preprocessed_url
+
 @csrf_exempt
 def check_url(request):
         if request.method == 'POST':
             data = json.loads(request.body)
             url = data.get('url')
 
+            # Preprocess the URL
+            preprocessed_url = preprocess_url(url)
+            
+            # Tokenize the URL
+            words = word_tokenize(preprocessed_url)
+            preprocessed_url = ' '.join(words)
 
-            def preprocess_url_for_app(url):
-                # Convert to lowercase
-                url = url.lower()
+            # Vectorize the preprocessed URL
+            url_vector = vectorizer.transform([preprocessed_url])
 
-                # Remove special characters and digits
-                url = re.sub(r'[^a-z\s]', '', url)
+            prediction = loaded_model.predict(url_vector)
 
-                # Tokenize and remove stopwords
-                stop_words = set(stopwords.words('english'))
-                words = word_tokenize(url)
-                filtered_words = [word for word in words if word not in stop_words]
-
-                # Reconstruct URL
-                preprocessed_url = ' '.join(filtered_words)
-
-                return preprocessed_url
+            if prediction == 'benign':
+                 result = {"is_malicious": False}
+                 return JsonResponse(result)
+            else:
+                 result = {"is_malicious": True}
+                 return JsonResponse(result)
+        else:
+            return JsonResponse({"error": "Only POST requests are allowed."}, status=405)
             
 
-            processed_url = preprocess_url_for_app(url)
+            
 
-            url_tfidf = vectorizer.transform([processed_url])
+
+
 
          
 
 
-            prediction = loaded_model.predict(url_tfidf)
-            print(prediction)
-            is_malicious = bool(prediction[0])
 
-            result = {"is_malicious": is_malicious}
-            return JsonResponse(result)
-        else:
-            return JsonResponse({"error": "Only POST requests are allowed."}, status=405)
 

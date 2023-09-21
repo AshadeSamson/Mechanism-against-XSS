@@ -1,9 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-data = pd.read_csv("../dataset/urldata.csv")
+data = pd.read_csv("../dataset/new.csv")
 
-print(data.groupby(['label'])['url'].count())
-data.groupby(['label'])['url'].count().plot(kind="bar")
+print(data.groupby(['type'])['url'].count())
+data.groupby(['type'])['url'].count().plot(kind="bar")
 plt.show()
 
