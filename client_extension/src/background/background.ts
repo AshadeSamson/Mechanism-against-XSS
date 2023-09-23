@@ -2,21 +2,52 @@
 
 chrome.webRequest.onBeforeRequest.addListener(
     (details) => {
-      // Process the URL here before the page loads.
+      
+      // capture and extract the url address
       const url = details.url;
-  
-      // You can perform any logic here, e.g., send the URL to your Django server.
-  
-      // Block the request to prevent the page from loading.
-      return { cancel: true };
+      const data = {url}
+
+      const serverEndpoint = 'http://127.0.0.1:8000/urlapp/check/'
+      const requestObject = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      }
+
+      // send request with url to server
+      fetch(serverEndpoint, requestObject)
+          .then(res => {
+            if(!res.ok){
+              throw new Error('Network connection was not OK')
+            }
+
+            return res.json()
+          })
+          .then(response => {
+            // if url is malicious, block page load and popup warning
+            if(response.is_malicious){
+              chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
+                if(tabs[0]?.id){
+                  chrome.tabs.sendMessage(tabs[0].id, {action: 'showWarning'});
+                }
+              })
+            } else{
+
+            }
+          })
+          .catch( err => {
+            console.log(err);
+          })
     },
     { urls: ["<all_urls>"] },
     ["blocking"]
   );
+
+  
   
   // Listen to messages from content scripts if needed.
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // Handle messages from content scripts here.
+    
   });
   
   
