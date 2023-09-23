@@ -2,13 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import pickle
-import re
 from nltk.tokenize import word_tokenize
-from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-from django.shortcuts import render
 from urllib.parse import urlparse
 
 
@@ -24,17 +18,13 @@ with open('vectorizer.pkl','rb') as saved_vectorizer:
     vectorizer = pickle.load(saved_vectorizer)
 
 
-# Create your views here.
-# the API request handler that takes in the URL
-# and passes it to the ML model 
-# and returns a response
-
-
+# URL preprocessing function
 def preprocess_url(url):
     parsed_url = urlparse(url)
     preprocessed_url = parsed_url.scheme + '://' + parsed_url.netloc + parsed_url.path
     return preprocessed_url
 
+# receiving request from client
 @csrf_exempt
 def check_url(request):
         if request.method == 'POST':
@@ -51,8 +41,10 @@ def check_url(request):
             # Vectorize the preprocessed URL
             url_vector = vectorizer.transform([preprocessed_url])
 
+            # Pass the tokenized url to the loaded model for prediction
             prediction = loaded_model.predict(url_vector)
 
+            # response sent back to client
             if prediction == 'benign':
                  result = {"is_malicious": False}
                  return JsonResponse(result)

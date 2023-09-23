@@ -4,3 +4,5 @@ urlapp/__pycache__/
 urlapp/migrations/
 urlChecker/__pycache__/
 node_modules/
+
+web_app/
