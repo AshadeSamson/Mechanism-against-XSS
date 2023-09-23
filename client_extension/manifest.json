@@ -9,13 +9,13 @@
       "default_icon": "src/images/xss.png"
     },
     "background": {
-      "scripts": ["src/background/background.js"],
+      "scripts": ["dist/background/background.js"],
       "persistent": true
     },
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["src/content/content.js"],
+        "js": ["dist/content/content.js"],
         "run_at": "document_start",
         "css": ["src/content/content.css"]
       }
