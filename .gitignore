@@ -6,3 +6,4 @@ urlChecker/__pycache__/
 node_modules/
 
 web_app/
+client_extension.pem

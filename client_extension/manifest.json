@@ -1,29 +1,42 @@
 {
     "manifest_version": 3,
+    "key": "",
     "name": "MitXSS",
     "version": "1.0",
     "description": "Prevent against malicious URLs and Cross-site scripting attacks",
-    "permissions": ["tabs", "activeTab", "webRequest", "webRequestBlocking", "storage"],
-    "browser_action": {
+    "permissions": ["tabs", "activeTab","declarativeNetRequest", "webNavigation", "storage"],
+    "action": {
       "default_popup": "src/popup/popup.html",
       "default_icon": "src/images/xss.png"
     },
     "background": {
-      "scripts": ["dist/background/background.js"],
-      "persistent": true
+      "service_worker": "dist/background/background.js"
     },
-    "content_scripts": [
+    "icons": {
+      "16": "src/images/xss.png",
+      "48": "src/images/xss.png",
+      "128": "src/images/xss.png"
+    },
+    "web_accessible_resources": [
       {
-        "matches": ["<all_urls>"],
-        "js": ["dist/content/content.js"],
-        "run_at": "document_start",
-        "css": ["src/content/content.css"]
+          "resources": ["popup.html"],
+          "matches": ["<all_urls>"]
       }
     ],
-    "icons": {
-      "16": "images/xss.png",
-      "48": "images/xss.png",
-      "128": "images/xss.png"
-    }
+    "host_permissions": [
+      "http://127.0.0.1:8000/urlapp/check/"
+    ],
+    "declarative_net_request": {
+      "rules_resources": [
+        {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+        
+
+  }
+    
   }
   

@@ -1,0 +1,22 @@
+[
+      {
+        "id": "1",
+        "priority": 1,
+        "action": {
+          "type": "block"
+        },
+        "condition": {
+          "urlFilter": ".*"  
+        }
+      },
+      {
+        "id": "2",
+        "priority": 2,
+        "action": {
+          "type": "allow"
+        },
+        "condition": {
+          "urlFilter": "http://127.0.0.1:8000/urlapp/check/*"
+        }
+      }
+]
