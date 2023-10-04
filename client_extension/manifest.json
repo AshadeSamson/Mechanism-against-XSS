@@ -1,10 +1,9 @@
 {
     "manifest_version": 3,
-    "key": "",
     "name": "MitXSS",
     "version": "1.0",
     "description": "Prevent against malicious URLs and Cross-site scripting attacks",
-    "permissions": ["tabs", "activeTab","declarativeNetRequest", "webNavigation", "storage"],
+    "permissions": ["tabs", "activeTab","declarativeNetRequest", "declarativeNetRequestFeedback", "webNavigation", "storage", "scripting"],
     "action": {
       "default_popup": "src/popup/popup.html",
       "default_icon": "src/images/xss.png"
@@ -17,25 +16,29 @@
       "48": "src/images/xss.png",
       "128": "src/images/xss.png"
     },
+    "content_scripts": [
+      {
+        "js": ["dist/content/content.js"],
+        "matches": ["<all_urls>"]
+      }
+    ],
     "web_accessible_resources": [
       {
-          "resources": ["popup.html"],
+          "resources": ["src/content/content.html","dist/content/content.js"],
           "matches": ["<all_urls>"]
       }
     ],
     "host_permissions": [
-      "http://127.0.0.1:8000/urlapp/check/"
+      "<all_urls>"
     ],
     "declarative_net_request": {
-      "rules_resources": [
+      "rule_resources": [
         {
         "id": "ruleset_1",
         "enabled": true,
-        "path": "rules.json"
+        "path": "./rules.json"
       }
     ]
-        
-
   }
     
   }
