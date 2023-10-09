@@ -13,7 +13,7 @@ from nltk.tokenize import word_tokenize
 nltk.download('punkt')
 
 # Read data from CSV file
-data = pd.read_csv("dataset/test.csv")
+data = pd.read_csv("../dataset/test.csv")
 
 # 'url' column for URLs and 'type' column for labels
 X = data['url']
@@ -25,7 +25,7 @@ def preprocess_url_for_training(url):
     parsed_url = urlparse(url)
     
     # Combine the components of the URL
-    preprocessed_url = parsed_url.scheme + '://' + parsed_url.netloc + parsed_url.path
+    preprocessed_url = parsed_url.scheme + '://' + parsed_url.netloc + parsed_url.path + parsed_url.params
     
     # Tokenize the URL
     words = word_tokenize(preprocessed_url)
